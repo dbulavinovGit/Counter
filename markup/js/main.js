@@ -12,8 +12,8 @@ function initchatrsCounter() {
 		this.options = $.extend({
 			activeClass: 'active',
 			maxHolder: '.total',
-			maxData: 'data-max',
 			currentCharts: '.left',
+			defaultMaxLengths: '20',
 			maxDisable: true
 		}, options);
 		this.init();
@@ -23,6 +23,7 @@ function initchatrsCounter() {
 		init: function() {
 			if (this.options.holder) {
 				this.findElements();
+				this.setMaxLength();
 				this.attachEvents();
 				this.setDefaultCharts();
 				this.disableInput();
@@ -32,9 +33,9 @@ function initchatrsCounter() {
 			this.holder = $(this.options.holder);
 			this.input = this.holder.find('textarea');
 			this.placeholder = this.input.attr('placeholder');
-			this.maxValue = this.input.attr(this.options.maxData);
 			this.maxHolder = this.holder.find(this.options.maxHolder);
 			this.current = this.holder.find(this.options.currentCharts);
+			this.maxValue;
 		},
 		attachEvents: function() {
 			var self = this;
@@ -45,11 +46,12 @@ function initchatrsCounter() {
 
 			this.input.on('input', this.eventHandler);
 		},
+		setMaxLength: function() {
+			return this.maxValue = (this.input.attr('maxlength')) ? this.maxValue = this.input.attr('maxlength') : this.maxValue = this.options.defaultMaxLengths;
+		},
 		setDefaultCharts: function() {
-			if(this.maxValue) {
-				this.maxHolder.text(this.maxValue);
-				this.current.text(this.maxValue);
-			}
+			this.maxHolder.text(this.maxValue);
+			this.current.text(this.maxValue);
 		},
 		calcCharts: function() {
 			var inputValue = this.input.val().length;
